@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void Leave()
     {
         PhotonNetwork.LeaveRoom();
+        
     }
 
     public override void OnLeftRoom()
@@ -34,5 +35,5 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 
-    
+
 }
