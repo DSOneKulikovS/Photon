@@ -31,4 +31,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         Debug.LogFormat("Player {0} lefy room", otherPlayer.NickName);
     }
+
+
+
+    
 }
