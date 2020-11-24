@@ -10,6 +10,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     private Animator anim;
     private Transform MainCamera;
     private Transform Player;
+    private Vector3 TargetPosition;
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -17,11 +18,13 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         {
             stream.SendNext(Direction);
             stream.SendNext(IsRun);
+            stream.SendNext(transform.position);
         }
         else
         {
             Direction = (Vector2)stream.ReceiveNext();
             IsRun = (bool)stream.ReceiveNext();
+            TargetPosition = (Vector3)stream.ReceiveNext();
         }
     }
 
@@ -38,7 +41,7 @@ public class PlayerControls : MonoBehaviour, IPunObservable
     {
         if (photonView.IsMine)
         {
-            transform.Translate(Input.GetAxis("Horizontal") * 0.01f, Input.GetAxis("Vertical") * 0.01f, 0);
+            transform.Translate(Input.GetAxis("Horizontal") * 0.05f, Input.GetAxis("Vertical") * 0.05f, 0);
 
             if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
                 IsRun = true;
@@ -49,6 +52,10 @@ public class PlayerControls : MonoBehaviour, IPunObservable
             if (Input.GetKey(KeyCode.D)) { Direction = Vector2.right; }
 
             MainCamera.position = Vector3.Lerp(MainCamera.position, new Vector3(returnPPX(), returnPPy(), -10), Time.deltaTime * 5f);
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(transform.position, TargetPosition, 10 * Time.deltaTime);
         }
 
         if (IsRun) anim.Play("Run");
