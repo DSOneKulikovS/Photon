@@ -37,7 +37,8 @@ public class PlayerControls : MonoBehaviour, IPunObservable
         Player = transform;
     }
 
-    void Update()
+
+    void FixedUpdate()
     {
         if (photonView.IsMine)
         {
@@ -50,8 +51,6 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
             if (Input.GetKey(KeyCode.A)) { Direction = Vector2.left; }
             if (Input.GetKey(KeyCode.D)) { Direction = Vector2.right; }
-
-            MainCamera.position = Vector3.Lerp(MainCamera.position, new Vector3(returnPPX(), returnPPy(), -10), Time.deltaTime * 5f);
         }
         else
         {
@@ -63,30 +62,6 @@ public class PlayerControls : MonoBehaviour, IPunObservable
 
         if (Direction == Vector2.left) spriteRenderer.flipX = true;
         if (Direction == Vector2.right) spriteRenderer.flipX = false;
-    }
-
-    private float returnPPX()
-    {
-        if (Player.position.x > -5.33f && Player.position.x < 5.33f)
-        {
-            return Player.position.x;
-        }
-        else
-        {
-            return MainCamera.position.x;
-        }
-    }
-
-    private float returnPPy()
-    {
-        if (Player.position.y > -0.42f && Player.position.y < 4.79f)
-        {
-            return Player.position.y;
-        }
-        else
-        {
-            return MainCamera.position.y;
-        }
     }
 
 }
